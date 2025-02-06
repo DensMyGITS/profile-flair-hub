@@ -89,6 +89,34 @@
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
+/* Accessible mode styles */
+.accessible-mode {
+  /* Увеличенный размер шрифта */
+  font-size: 120%;
+  
+  /* Повышенная контрастность */
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  
+  /* Увеличенные интервалы между строками */
+  line-height: 1.8;
+  
+  /* Увеличенные отступы между элементами */
+  --spacing-factor: 1.5;
+}
+
+.accessible-mode button,
+.accessible-mode a {
+  /* Увеличенные области нажатия */
+  padding: calc(0.5rem * var(--spacing-factor)) !important;
+}
+
+.accessible-mode * {
+  /* Отключение анимаций */
+  animation: none !important;
+  transition: none !important;
+}
+
   @keyframes sidebar-slide-in {
     from {
       transform: translateX(-100%);
