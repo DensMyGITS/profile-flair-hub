@@ -88,6 +88,23 @@
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
+
+  @keyframes sidebar-slide-in {
+    from {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+@layer utilities {
+  .animate-sidebar-slide-in {
+    animation: sidebar-slide-in 0.3s ease-out;
+  }
 }
 
 @layer base {
