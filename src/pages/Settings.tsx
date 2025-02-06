@@ -5,11 +5,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useTheme } from "@/components/theme-provider";
 import { useTranslation } from "react-i18next";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Settings() {
   const { theme, setTheme } = useTheme();
   const { t, i18n } = useTranslation();
   const [location, setLocation] = useState<string>("");
+  const { toast } = useToast();
 
   useEffect(() => {
     // Get user's location
@@ -17,18 +19,46 @@ export default function Settings() {
       navigator.geolocation.getCurrentPosition(async (position) => {
         try {
           const response = await fetch(
-            `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=YOUR_API_KEY`
+            `https://api.opencagedata.com/geocode/v1/json?q=${position.coords.latitude}+${position.coords.longitude}&key=${process.env.OPENCAGE_API_KEY}`,
+            {
+              headers: {
+                'Accept': 'application/json'
+              }
+            }
           );
+          
+          if (!response.ok) {
+            throw new Error('Failed to fetch location data');
+          }
+          
           const data = await response.json();
-          if (data.results[0]) {
+          if (data.results && data.results[0]) {
             setLocation(data.results[0].formatted);
+          } else {
+            throw new Error('No location data found');
           }
         } catch (error) {
           console.error("Error fetching location:", error);
+          toast({
+            title: t('settings.locationError'),
+            description: t('settings.locationErrorDesc'),
+            variant: "destructive",
+          });
+          setLocation(t('settings.locationError'));
         }
+      }, (error) => {
+        console.error("Geolocation error:", error);
+        toast({
+          title: t('settings.geolocationError'),
+          description: t('settings.geolocationErrorDesc'),
+          variant: "destructive",
+        });
+        setLocation(t('settings.geolocationError'));
       });
+    } else {
+      setLocation(t('settings.geolocationNotSupported'));
     }
-  }, []);
+  }, [t, toast]);
 
   return (
     <div className="container mx-auto py-8">
