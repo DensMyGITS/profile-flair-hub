@@ -11,7 +11,6 @@ export function AppHeader() {
 
   const toggleAccessibleMode = () => {
     setIsAccessibleMode(!isAccessibleMode);
-    // Apply accessible mode styles
     document.documentElement.classList.toggle('accessible-mode');
     
     toast({
@@ -30,16 +29,21 @@ export function AppHeader() {
         </Button>
 
         <Button
-          variant="ghost"
-          size="icon"
+          variant="outline"
           onClick={toggleAccessibleMode}
-          className="ml-auto"
+          className="ml-auto flex items-center gap-2 px-4 py-2 text-base"
           aria-label={isAccessibleMode ? "Выключить режим для слабовидящих" : "Включить режим для слабовидящих"}
         >
           {isAccessibleMode ? (
-            <ToggleRight className="h-6 w-6" />
+            <>
+              <ToggleRight className="h-8 w-8" />
+              <span className="hidden sm:inline">Обычный режим</span>
+            </>
           ) : (
-            <ToggleLeft className="h-6 w-6" />
+            <>
+              <ToggleLeft className="h-8 w-8" />
+              <span className="hidden sm:inline">Режим для слабовидящих</span>
+            </>
           )}
         </Button>
       </div>
